@@ -1,5 +1,4 @@
 import { useState, useRef } from "react"
-import styles from './DeliveryAddress.module.css'
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from 'zod'
 import { useForm } from "react-hook-form"
@@ -76,9 +75,9 @@ export function DeliveryAddress() {
     console.log(errors)
 
     return (
-        <div className={styles.formContainer}>
+        <div >
             
-            <form onSubmit={handleSubmit(handleSubmitAddressForm)} className={styles.formContent}>
+            <form onSubmit={handleSubmit(handleSubmitAddressForm)} >
                 <div className="deliveryFormData">
                     <label htmlFor="selectWorld">* Selecione o mundo onde você se encontra:</label>
                     <select name="" id="selectWorld" onChange={handleChange} defaultValue="selected">
