@@ -6,9 +6,10 @@ export const FormContainer = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 3rem 0;
 
     .maxSelectContainer {
-        width: 510px;
+        width: 810px;
 
         section {
             display: flex;
@@ -28,7 +29,7 @@ export const FormContainer = styled.section`
     .imageContainer.active {
         display: block;
         max-height: 150px;
-        width: 510px;
+        width: 810px;
         margin-top: 0.5rem;
         border-radius: 10px;
 
@@ -53,7 +54,7 @@ export const DeliveryForm = styled.form`
         width: 70%;
         display: grid;
         margin-top: 1rem;
-        grid-template-columns: repeat(2, 250px);
+        grid-template-columns: repeat(2, 400px);
         justify-content: center;
         grid-gap: 0.7rem;
         
@@ -74,16 +75,35 @@ export const DeliveryForm = styled.form`
         }
     
         .deliveryFormData input {
-            width: 200px;
+            width: 220px;
             padding: 5px;
             border-radius: 6px;
             border: 1px solid black;
+
+            &:not(:disabled)::placeholder {
+                color: black;
+                font-weight: 700;
+            }
+
+            &:disabled {
+                border: 0;
+            }
         }
     }
 `
 
 export const ButtonContainer = styled.div`
-    width: 100%;
+    width: 810px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+
+    button {
+        width: 100px;
+        padding: 5px 0;
+        border: 0;
+        background-color: #0d6efd;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+    }
 `

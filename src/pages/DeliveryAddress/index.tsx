@@ -1,32 +1,45 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useContext, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from 'zod'
 import { useForm } from "react-hook-form"
 import { ButtonContainer, DeliveryForm, FormContainer } from "./styles"
 import earth from '/images/earth.jpg'
 import mars from '/images/mars.jpg'
+import { DeliveryContext } from "../../contexts/DeliveryContext"
+import { useSearchParams } from "react-router-dom"
 
 export function DeliveryAddress() {
     const [remetentWorld, setRemententWorld] = useState('')
     const deliveryWorldRef = useRef<HTMLInputElement>(null)
 
+    const [seachParams] = useSearchParams()
+
+    const { createDeliveryAddressInformation } = useContext(DeliveryContext)
+
+
     const addressFormSchema = zod.object({
         deliveryWorld: zod.string(),
         industryName: zod.string().min(4),
-        marsCode: zod.number().min(4, 'O código deve conter no mínimo 4 digitos'),
+        marsCode: zod.number()
+            .min(1000, 'O código deve conter no mínimo 4 digitos')
+            .max(9999, 'O código deve conter no máximo 4 digitos'),
         zipCode: zod.string(),
+        street: zod.string(),
+        neighborhood: zod.string(),
         country: zod.string(),
         state: zod.string(),
         city: zod.string(),
     })
 
-    const { register, handleSubmit, setValue, formState } = useForm({
+    const { register, handleSubmit, setValue, formState, reset } = useForm({
         resolver: zodResolver(addressFormSchema),
         defaultValues: {
             industryName: '',
             deliveryWorld: '',
-            marsCode: 0o0,
+            marsCode: 0,
             zipCode: '',
+            street: '',
+            neighborhood: '',
             country: '',
             state: '',
             city: ''
@@ -34,6 +47,10 @@ export function DeliveryAddress() {
     })
 
     const { errors } = formState
+
+    useEffect(() => {
+        console.log(seachParams)
+    }, [seachParams])
 
 
     type FormDataProps = zod.infer<typeof addressFormSchema>
@@ -48,34 +65,35 @@ export function DeliveryAddress() {
                 setValue('deliveryWorld', 'Marte')
             } else {
                 deliveryWorldRef.current.value = 'Terra'
-                setValue('marsCode', 0o0)
+                setValue('marsCode', 1000)
                 setValue('deliveryWorld', 'Terra')
             }
         }
     }
 
     function handleSubmitAddressForm(data: FormDataProps) {
-        const { deliveryWorld, industryName, marsCode, zipCode, country, state, city } = data
+        const { deliveryWorld, industryName, marsCode, zipCode, street, country, state, city } = data
 
         if (remetentWorld === 'marte') {
-            console.log({
+            createDeliveryAddressInformation({
                 deliveryWorld,
                 industryName,
                 zipCode,
+                street,
                 country,
                 state,
                 city
             })
+            reset()
         } else {
-            console.log({
+            createDeliveryAddressInformation({
                 deliveryWorld,
                 industryName,
                 marsCode
             })
+            reset()
         }
     }
-
-    console.log(errors)
 
     return (
         <FormContainer>
@@ -97,7 +115,7 @@ export function DeliveryAddress() {
             <DeliveryForm onSubmit={handleSubmit(handleSubmitAddressForm)} >
                 <div className="maxFormContainer">
                     <div className="deliveryFormData">
-                        <label htmlFor="deliveryWorld">* Mundo do destinatário:</label>
+                        <label htmlFor="deliveryWorld">Mundo do destinatário:</label>
                         <input
                             type="text"
                             placeholder="Mundo de destino"
@@ -145,12 +163,24 @@ export function DeliveryAddress() {
                         />
                     </div>
 
-                    <div className={`deliveryFormData ${remetentWorld === 'marte' ? ' active' : remetentWorld === 'terra' ? ' inactive' : ''}`}>
-                        <label htmlFor="country">* País:</label>
+                    <div
+                        className={`deliveryFormData ${remetentWorld === 'marte' ? ' active' : remetentWorld === 'terra' ? ' inactive' : ''}`}>
+                        <label htmlFor="zipCode">*Rua:</label>
                         <input
                             type="text"
-                            placeholder="País"
-                            {...register("country")}
+                            placeholder="Rua"
+                            {...register("street")}
+                            required={remetentWorld === 'marte'}
+                        />
+                    </div>
+
+                    <div
+                        className={`deliveryFormData ${remetentWorld === 'marte' ? ' active' : remetentWorld === 'terra' ? ' inactive' : ''}`}>
+                        <label htmlFor="zipCode">*Bairro:</label>
+                        <input
+                            type="text"
+                            placeholder="Bairro"
+                            {...register("neighborhood")}
                             required={remetentWorld === 'marte'}
                         />
                     </div>
@@ -171,6 +201,16 @@ export function DeliveryAddress() {
                             type="text"
                             placeholder="Cidade"
                             {...register("city")}
+                            required={remetentWorld === 'marte'}
+                        />
+                    </div>
+
+                    <div className={`deliveryFormData ${remetentWorld === 'marte' ? ' active' : remetentWorld === 'terra' ? ' inactive' : ''}`}>
+                        <label htmlFor="country">* País:</label>
+                        <input
+                            type="text"
+                            placeholder="País"
+                            {...register("country")}
                             required={remetentWorld === 'marte'}
                         />
                     </div>
