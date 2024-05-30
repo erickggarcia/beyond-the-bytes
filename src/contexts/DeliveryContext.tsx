@@ -27,6 +27,7 @@ export const DeliveryContext = createContext({} as DeliveryContextProviderProps)
 
 export function DeliveryContextProvider({ children }: childrenProps) {
     const [addresses, setAddresses] = useState<DeliveryAddressData[]>([])
+    console.log(addresses)
 
     function createDeliveryAddressInformation(data: DeliveryAddressData) {
         setAddresses((state) => [...state, data])

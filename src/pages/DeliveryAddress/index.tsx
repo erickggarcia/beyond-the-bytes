@@ -49,8 +49,40 @@ export function DeliveryAddress() {
     const { errors } = formState
 
     useEffect(() => {
-        console.log(seachParams)
-    }, [seachParams])
+        if (seachParams.size > 0) {
+            const selection = document.getElementById('selectWorld') as HTMLSelectElement
+            const industryName = seachParams.get('i')!.toString()
+
+            if (seachParams.get('d') === 'Marte') {
+                const marsCode = Number(seachParams.get('m'))
+                selection.value = 'terra'
+                setRemententWorld('terra')
+                deliveryWorldRef.current!.value = 'Marte'
+                setValue('marsCode', marsCode)
+                setValue('industryName', industryName)
+
+            } else if (seachParams.get('d') === 'Terra') {
+                const zipCode = seachParams.get('z')!.toString()
+                const street = seachParams.get('s')!.toString()
+                const neighborhood = seachParams.get('n')!.toString()
+                const country = seachParams.get('c')!.toString()
+                const state = seachParams.get('y')!.toString()
+                const city = seachParams.get('o')!.toString()
+
+                selection.value = 'marte'
+                setRemententWorld('marte')
+                deliveryWorldRef.current!.value = 'Terra'
+                setValue('industryName', industryName)
+                setValue('zipCode', zipCode)
+                setValue('street', street)
+                setValue('neighborhood', neighborhood)
+                setValue('country', country)
+                setValue('state', state)
+                setValue('city', city)
+            }
+        }
+
+    }, [seachParams, setValue])
 
 
     type FormDataProps = zod.infer<typeof addressFormSchema>
@@ -72,13 +104,14 @@ export function DeliveryAddress() {
     }
 
     function handleSubmitAddressForm(data: FormDataProps) {
-        const { deliveryWorld, industryName, marsCode, zipCode, street, country, state, city } = data
+        const { deliveryWorld, industryName, marsCode, zipCode, street, country, state, city, neighborhood } = data
 
         if (remetentWorld === 'marte') {
             createDeliveryAddressInformation({
                 deliveryWorld,
                 industryName,
                 zipCode,
+                neighborhood,
                 street,
                 country,
                 state,
@@ -176,7 +209,7 @@ export function DeliveryAddress() {
 
                     <div
                         className={`deliveryFormData ${remetentWorld === 'marte' ? ' active' : remetentWorld === 'terra' ? ' inactive' : ''}`}>
-                        <label htmlFor="zipCode">*Bairro:</label>
+                        <label htmlFor="neighborhood">*Bairro:</label>
                         <input
                             type="text"
                             placeholder="Bairro"
