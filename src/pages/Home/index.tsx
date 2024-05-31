@@ -1,13 +1,12 @@
-import { useContext, useState } from 'react'
+import { useContext} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { DeliveryAddressData, DeliveryContext } from '../../contexts/DeliveryContext'
+import { DeliveryContext } from '../../contexts/DeliveryContext'
 import { DeliveryContent, DeliveryInformation, HomeContainer, HomeContent } from './styles'
 import emptyImage from '/images/empty.png'
 
 export function Home() {
     const navigate = useNavigate()
-    const { addresses, deleteDeliveryAddressInformation } = useContext(DeliveryContext)
-    const [active, setActive] = useState<DeliveryAddressData>({})
+    const { addresses, deleteDeliveryAddressInformation, selectDeliveryAddress, active } = useContext(DeliveryContext)
 
     function handleUpdateDeliveryAddress(event: React.MouseEvent<HTMLSpanElement>) {
 
@@ -40,7 +39,7 @@ export function Home() {
     }
 
     function handleSelectDeliveryAddress(index: number) {
-        setActive(addresses[index])
+        selectDeliveryAddress(index)
     }
 
     return (

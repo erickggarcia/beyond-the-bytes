@@ -37,7 +37,7 @@ export function DeliveryAddress() {
         defaultValues: {
             industryName: '',
             deliveryWorld: '',
-            marsCode: 0,
+            marsCode: 1000,
             zipCode: '',
             street: '',
             neighborhood: '',

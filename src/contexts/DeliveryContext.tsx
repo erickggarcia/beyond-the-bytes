@@ -14,9 +14,11 @@ export interface DeliveryAddressData {
 
 interface DeliveryContextProviderProps {
     addresses: DeliveryAddressData[]
+    active: DeliveryAddressData
     createDeliveryAddressInformation: (data: DeliveryAddressData) => void
     updateDeliveryAddressInformation: (data: DeliveryAddressData) => void
     deleteDeliveryAddressInformation: (industryname: string) => void
+    selectDeliveryAddress: (index: number) => void
 }
 
 
@@ -29,7 +31,8 @@ export const DeliveryContext = createContext({} as DeliveryContextProviderProps)
 
 export function DeliveryContextProvider({ children }: childrenProps) {
     const [addresses, setAddresses] = useState<DeliveryAddressData[]>([])
-    console.log(addresses)
+    const [active, setActive] = useState<DeliveryAddressData>({})
+
 
     function createDeliveryAddressInformation(data: DeliveryAddressData) {
         setAddresses((state) => [...state, data])
@@ -51,8 +54,12 @@ export function DeliveryContextProvider({ children }: childrenProps) {
         setAddresses(addressWithoutDeletedOne)
     }
 
+    function selectDeliveryAddress(index: number) {
+        setActive(addresses[index])
+    }
+
     return (
-        <DeliveryContext.Provider value={{ createDeliveryAddressInformation, addresses, updateDeliveryAddressInformation, deleteDeliveryAddressInformation }}>
+        <DeliveryContext.Provider value={{ createDeliveryAddressInformation, addresses, updateDeliveryAddressInformation, deleteDeliveryAddressInformation, selectDeliveryAddress, active }}>
             {children}
         </DeliveryContext.Provider>
     )

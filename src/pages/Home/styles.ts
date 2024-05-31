@@ -12,6 +12,7 @@ export const HomeContent = styled.section`
         justify-content: center;
         display: flex;
         gap: 0.5rem;
+        margin-bottom: 1rem;
 
         button {
             padding: 5px;
