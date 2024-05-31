@@ -43,11 +43,21 @@ export const DeliveryContent = styled.section`
 
             span {
                 cursor: pointer;
+            }
 
+            span:first-of-type {
                 &:hover {
                     color: #0d6efd;
                 }
             }
+
+            span:last-of-type {
+                &:hover {
+                    color: red;
+                }
+
+            }
+
         }
     }
 `
@@ -58,6 +68,11 @@ export const DeliveryInformation = styled.article`
             align-items: center;
             gap: 4rem;
             padding: 10px;
+
+            .destinyWorld {
+                max-width: 60px;
+                text-align: center;
+            }
             
             img {
                 display: block;

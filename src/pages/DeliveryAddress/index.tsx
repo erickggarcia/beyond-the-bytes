@@ -6,15 +6,16 @@ import { ButtonContainer, DeliveryForm, FormContainer } from "./styles"
 import earth from '/images/earth.jpg'
 import mars from '/images/mars.jpg'
 import { DeliveryContext } from "../../contexts/DeliveryContext"
-import { useSearchParams } from "react-router-dom"
+import { useSearchParams, useNavigate } from "react-router-dom"
 
 export function DeliveryAddress() {
     const [remetentWorld, setRemententWorld] = useState('')
     const deliveryWorldRef = useRef<HTMLInputElement>(null)
 
     const [seachParams] = useSearchParams()
+    const navigate = useNavigate()
 
-    const { createDeliveryAddressInformation } = useContext(DeliveryContext)
+    const { createDeliveryAddressInformation, updateDeliveryAddressInformation } = useContext(DeliveryContext)
 
 
     const addressFormSchema = zod.object({
@@ -106,27 +107,56 @@ export function DeliveryAddress() {
     function handleSubmitAddressForm(data: FormDataProps) {
         const { deliveryWorld, industryName, marsCode, zipCode, street, country, state, city, neighborhood } = data
 
-        if (remetentWorld === 'marte') {
-            createDeliveryAddressInformation({
-                deliveryWorld,
-                industryName,
-                zipCode,
-                neighborhood,
-                street,
-                country,
-                state,
-                city
-            })
-            reset()
+        if (seachParams.size <= 0) {
+            if (remetentWorld === 'marte') {
+                createDeliveryAddressInformation({
+                    deliveryWorld,
+                    industryName,
+                    zipCode,
+                    neighborhood,
+                    street,
+                    country,
+                    state,
+                    city
+                })
+                reset()
+                navigate('/')
+            } else {
+                createDeliveryAddressInformation({
+                    deliveryWorld,
+                    industryName,
+                    marsCode
+                })
+                reset()
+                navigate('/')
+            }
         } else {
-            createDeliveryAddressInformation({
-                deliveryWorld,
-                industryName,
-                marsCode
-            })
-            reset()
+            if (remetentWorld === 'marte') {
+                updateDeliveryAddressInformation({
+                    deliveryWorld: seachParams.get('d')!.toString(),
+                    industryName,
+                    zipCode,
+                    neighborhood,
+                    street,
+                    country,
+                    state,
+                    city
+                })
+                reset()
+                navigate('/')
+            } else {
+                updateDeliveryAddressInformation({
+                    deliveryWorld: seachParams.get('d')!.toString(),
+                    industryName,
+                    marsCode
+                })
+                reset()
+                navigate('/')
+
+            }
         }
     }
+
 
     return (
         <FormContainer>
