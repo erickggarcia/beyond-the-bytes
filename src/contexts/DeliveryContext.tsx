@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useState } from "react";
 
-interface DeliveryAddressData {
+export interface DeliveryAddressData {
     deliveryWorld?: string
     industryName?: string
     marsCode?: number

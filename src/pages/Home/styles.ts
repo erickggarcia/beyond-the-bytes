@@ -29,9 +29,14 @@ export const DeliveryContent = styled.section`
     div {
         display: flex;
         flex-direction: column;
-        border: 2px solid #0d6efd;
+        border: 2px solid black;
         margin-top: 20px;
         border-radius: 10px;
+        cursor: pointer;
+
+        &.active {
+            border-color: #0d6efd;
+        }
 
         .addressActions {
             margin-top: 0;

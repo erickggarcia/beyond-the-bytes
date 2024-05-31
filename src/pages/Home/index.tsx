@@ -1,12 +1,13 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { DeliveryContext } from '../../contexts/DeliveryContext'
+import { DeliveryAddressData, DeliveryContext } from '../../contexts/DeliveryContext'
 import { DeliveryContent, DeliveryInformation, HomeContainer, HomeContent } from './styles'
 import emptyImage from '/images/empty.png'
 
 export function Home() {
     const navigate = useNavigate()
     const { addresses, deleteDeliveryAddressInformation } = useContext(DeliveryContext)
+    const [active, setActive] = useState<DeliveryAddressData>({})
 
     function handleUpdateDeliveryAddress(event: React.MouseEvent<HTMLSpanElement>) {
 
@@ -38,6 +39,10 @@ export function Home() {
         }
     }
 
+    function handleSelectDeliveryAddress(index: number) {
+        setActive(addresses[index])
+    }
+
     return (
         <HomeContainer >
             <HomeContent>
@@ -52,7 +57,11 @@ export function Home() {
                         <DeliveryContent>
                             <h2>Lista de endereços</h2>
                             {addresses.map((address, index) => (
-                                <div key={index}>
+                                <div
+                                    onClick={() => handleSelectDeliveryAddress(index)}
+                                    key={index}
+                                    className={active && active.industryName === address.industryName ? 'active' : ''}
+                                >
                                     {address.deliveryWorld === 'Marte' ? (
                                         <>
                                             <DeliveryInformation>
